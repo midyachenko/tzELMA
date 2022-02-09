@@ -4,6 +4,7 @@ import requests
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'fudging786hfg6hfg6h7f'
 
+
 @app.route('/index')
 @app.route('/')
 def index():
@@ -20,7 +21,13 @@ def counts():
     # print(vh_dict)
     urls_list = []
     for req in (vh_dict.get('urls')):
-        response = requests.get(req.get('url'), timeout=vh_dict.get('max_timeout'))
+
+        try:
+            response = requests.get(req.get('url'), timeout=vh_dict.get('max_timeout'))
+        except TimeoutError:
+            print('TIMEOUT ERROR')
+
+
         if response.status_code != 200:
             res_status = 'error'
             # Если Timeout будет больше заданного вернётся код 408
